@@ -73,26 +73,6 @@ try
         Console.WriteLine(Path.GetFileName(sourceFilePath) + " -> " + destinationDirectory);
         File.Move(sourceFilePath, Path.Combine(destinationDirectory, Path.GetFileName(sourceFilePath)), true);
     }
-    //string[] filesToMove = Directory.GetFiles(extractPath);
-    //foreach (string file in filesToMove)
-    //    File.Move(file, Path.Combine(minecraftPath, Path.GetFileName(file)), true);
-
-    //string[] filesToMove = Directory.GetFiles(extractPath);
-    //string[] directoriesToMove = Directory.GetDirectories(extractPath);
-
-    //foreach (string file in filesToMove)
-    //    File.Move(file, Path.Combine(minecraftPath, Path.GetFileName(file)), true);
-
-    //foreach (string directory in directoriesToMove)
-    //{
-    //    string currentDirectory = Path.Combine(minecraftPath, Path.GetFileName(directory));
-    //    string[] filesInDirectory = Directory.GetFiles(directory);
-    //    string[] foldersInDirectory = Directory.GetDirectories(directory);
-    //    foreach (string file in filesInDirectory)
-    //        File.Move(file, Path.Combine(currentDirectory, Path.GetFileName(file)), true);
-    //    foreach (string directoryIn in foldersInDirectory)
-    //        Directory.Move(directoryIn, Path.Combine(currentDirectory, Path.GetFileName(directory)));
-    //}
     Console.WriteLine("Files moved to their destination.");
 
     Console.WriteLine("Deleting downloaded files...");
