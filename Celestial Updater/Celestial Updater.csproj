@@ -6,7 +6,18 @@
     <RootNamespace>Celestial_Updater</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Title>Celestial Updater</Title>
+    <Authors>deuli</Authors>
+    <Description>A script to update Prism Launcher modpacks</Description>
+    <RepositoryUrl>https://github.com/deuli/Celestial-Updater</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Version>1.2</Version>
+    <ApplicationIcon>rocket.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="rocket.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
