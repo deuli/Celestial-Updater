@@ -100,6 +100,7 @@ public class Program
             using (WebClient client = new WebClient())
             {
                 long lastBytes = 0;
+                long totalBytes = -1;
                 DateTime lastUpdate = DateTime.MinValue;
 
                 client.DownloadProgressChanged += (sender, e) =>
@@ -112,6 +113,7 @@ public class Program
                         Console.SetCursorPosition(0, barLocation);
                         Console.Write(new string(' ', Console.WindowWidth));
 
+                        Console.SetCursorPosition(0, barLocation);
                         Console.Write($"{e.BytesReceived - lastBytes} b/s ");
                         lastBytes = e.BytesReceived;
 
@@ -129,13 +131,21 @@ public class Program
 
                         Console.Write($" {e.BytesReceived} of {e.TotalBytesToReceive} bytes ({e.ProgressPercentage}%)");
                     }
+
+                    if (totalBytes == -1)
+                        totalBytes = e.TotalBytesToReceive;
                 };
 
                 client.DownloadFileAsync(new Uri(config.url), config.savePath);
                 while (client.IsBusy) { };
 
+                Console.SetCursorPosition(0, barLocation);
+                Console.Write(new string(' ', Console.WindowWidth));
+
+                Console.SetCursorPosition(0, barLocation);
+                Console.WriteLine($"{totalBytes - lastBytes} b/s [██████████] {totalBytes} of {totalBytes} bytes (100%)");
             }
-            Console.WriteLine("\nDownloaded complete.");
+            Console.WriteLine("Download complete.");
 
             Console.WriteLine("Extracting all the files into " + config.extractPath + "...");
             if (!Directory.Exists(config.extractPath))
