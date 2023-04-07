@@ -20,10 +20,10 @@ public class CelestialConfig
     public CelestialConfig()
     {
         instancePath = instancesPath + instanceID;
-        savePath = instancePath + @"\DownloadedFiles.rar";
-        extractPath = instancePath + @"\ExtractedFiles";
-        minecraftPath = instancePath + @"\.minecraft";
-        modsPath = minecraftPath + @"\mods";
+        savePath = Path.Combine(instancePath, "DownloadedFiles.rar");
+        extractPath = Path.Combine(instancePath, "ExtractedFiles");
+        minecraftPath = Path.Combine(instancePath, ".minecraft");
+        modsPath = Path.Combine(minecraftPath, "mods");
     }
 }
 
