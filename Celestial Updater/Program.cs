@@ -101,7 +101,17 @@ public class Program
                     if (DateTime.Now - lastUpdate >= TimeSpan.FromSeconds(1))
                     {
                         lastUpdate = DateTime.Now;
-                        Console.WriteLine($"Downloaded {e.BytesReceived} of {e.TotalBytesToReceive} bytes ({e.ProgressPercentage}%)");
+                        Console.Write("SPEED ");
+                        for (int i = 1; i <= 10; i++)
+                        {
+                            if (e.ProgressPercentage / 10 >= i)
+                                Console.Write("█");
+                            else if (e.ProgressPercentage / 10.0 > (double)i - 0.5)
+                                Console.Write("▒");
+                            else
+                                Console.Write("░");
+                        }
+                        Console.WriteLine($" {e.BytesReceived} of {e.TotalBytesToReceive} bytes ({e.ProgressPercentage}%)");
                     }
                 };
 
