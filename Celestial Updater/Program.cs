@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Text.Json.Serialization;
 using SharpCompress.Archives;
 using SharpCompress.Archives.Rar;
 using SharpCompress.Common;
