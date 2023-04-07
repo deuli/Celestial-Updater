@@ -93,15 +93,29 @@ public class Program
         try
         {
             Console.WriteLine("Downloading the modpack files from " + config.url + "...");
+
+            //Console.WriteLine("??? b/s [░░░░░░░░░░] ??? of ??? bytes (???%)");
+            int barLocation = Console.CursorTop;
+            
             using (WebClient client = new WebClient())
             {
-                DateTime lastUpdate = DateTime.Now;
+                long lastBytes = 0;
+                DateTime lastUpdate = DateTime.MinValue;
+
                 client.DownloadProgressChanged += (sender, e) =>
                 {
-                    if (DateTime.Now - lastUpdate >= TimeSpan.FromSeconds(1))
+                    if (DateTime.Now - lastUpdate >= TimeSpan.FromSeconds(1) && client.IsBusy)
                     {
                         lastUpdate = DateTime.Now;
-                        Console.Write("SPEED ");
+
+                        //Clear previous line
+                        Console.SetCursorPosition(0, barLocation);
+                        Console.Write(new string(' ', Console.WindowWidth));
+
+                        Console.Write($"{e.BytesReceived - lastBytes} b/s ");
+                        lastBytes = e.BytesReceived;
+
+                        Console.Write("[");
                         for (int i = 1; i <= 10; i++)
                         {
                             if (e.ProgressPercentage / 10 >= i)
@@ -111,7 +125,9 @@ public class Program
                             else
                                 Console.Write("░");
                         }
-                        Console.WriteLine($" {e.BytesReceived} of {e.TotalBytesToReceive} bytes ({e.ProgressPercentage}%)");
+                        Console.Write("]");
+
+                        Console.Write($" {e.BytesReceived} of {e.TotalBytesToReceive} bytes ({e.ProgressPercentage}%)");
                     }
                 };
 
@@ -119,7 +135,7 @@ public class Program
                 while (client.IsBusy) { };
 
             }
-            Console.WriteLine("Downloaded complete.");
+            Console.WriteLine("\nDownloaded complete.");
 
             Console.WriteLine("Extracting all the files into " + config.extractPath + "...");
             if (!Directory.Exists(config.extractPath))
