@@ -30,6 +30,7 @@ public class CelestialConfig
 public class Program
 {
     private static string configFile = "celestialconfig.json";
+    private static string modlistFile = ".modlist.txt";
 
     static void Main(string[] args)
     {
@@ -127,12 +128,54 @@ public class Program
 
             if (Directory.Exists(config.modsPath))
             {
-                Console.WriteLine("Deleting the mods folder...");
-                Directory.Delete(config.modsPath, true);
-                Console.WriteLine("mods folder has been deleted.");
+                if(File.Exists(Path.Combine(config.modsPath, modlistFile)))
+                {
+                    Console.WriteLine("Deleting previous mods...");
+                    string[] modlist = File.ReadAllLines(Path.Combine(config.modsPath, modlistFile));
+                    string[] modfiles = Directory.GetFiles(config.modsPath);
+                    foreach (string modfile in modfiles)
+                    {
+                        Console.WriteLine(Path.GetFileName(modfile) + ": " + modlist.Contains(Path.GetFileName(modfile)));
+                        if (modlist.Contains(Path.GetFileName(modfile)))
+                        {
+                            File.Delete(modfile);
+                            Console.WriteLine("Deleted " + Path.GetFileName(modfile));
+                        }
+                        else
+                            Console.WriteLine("Skipped " + Path.GetFileName(modfile));
+                    }
+                    Console.WriteLine("Previous mods deleted.");
+                }
+                else
+                {
+                    Console.WriteLine(modlistFile + " not found. Deleting the mods folder...");
+                    Directory.Delete(config.modsPath, true);
+                    Console.WriteLine("mods folder has been deleted.");
+                }
             }
 
-            Console.WriteLine("Moving files to their location...");
+            Console.WriteLine("Creating a mods list text file and moving mod files...");
+            if(Directory.Exists(Path.Combine(config.extractPath, "mods")))
+            {
+                string[] modlist = { };
+                string[] modfiles = Directory.GetFiles(Path.Combine(config.extractPath, "mods"));
+
+                if (!Directory.Exists(config.modsPath))
+                    Directory.CreateDirectory(config.modsPath);
+
+                foreach (string modfile in modfiles)
+                {
+                    Array.Resize(ref modlist, modlist.Length + 1);
+                    modlist[modlist.Length - 1] = Path.GetFileName(modfile);
+                    File.Move(modfile, Path.Combine(config.modsPath, Path.GetFileName(modfile)), true);
+                    Console.WriteLine("Added " + Path.GetFileName(modfile));
+                }
+
+                File.WriteAllLines(Path.Combine(config.modsPath, modlistFile), modlist);
+            }
+            Console.WriteLine("mods list text file created and mod files moved successfully.");
+
+            Console.WriteLine("Moving rest of the files to their location...");
             foreach (string sourceFilePath in Directory.GetFiles(config.extractPath, "*", SearchOption.AllDirectories))
             {
                 string destinationDirectory = Path.GetDirectoryName(sourceFilePath.Replace(config.extractPath, config.minecraftPath));
