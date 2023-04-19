@@ -18,6 +18,11 @@ public class CelestialConfig
 
     public CelestialConfig()
     {
+        CreatePaths();
+    }
+
+    public void CreatePaths()
+    {
         instancePath = Path.Combine(instancesPath, instanceID);
         savePath = Path.Combine(instancePath, "DownloadedFiles.rar");
         extractPath = Path.Combine(instancePath, "ExtractedFiles");
@@ -38,6 +43,7 @@ public class Program
         {
             Console.WriteLine("Config file found. Loading values...");
             config = JsonConvert.DeserializeObject<CelestialConfig>(File.ReadAllText("celestialconfig.json"));
+            config.CreatePaths();
 
             if(config == null)
             {
