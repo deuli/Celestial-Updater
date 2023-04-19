@@ -9,7 +9,7 @@ public class CelestialConfig
 {
     public string instanceID = "Nebula SMP";
     public string url = "https://www.dropbox.com/s/gb9056pklrl0vxs/Nebula.rar?dl=1";
-    public string instancesPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\PrismLauncher\instances\";
+    public string instancesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PrismLauncher", "instances");
     [JsonIgnore] public string instancePath;
     [JsonIgnore] public string savePath;
     [JsonIgnore] public string extractPath;
@@ -18,7 +18,7 @@ public class CelestialConfig
 
     public CelestialConfig()
     {
-        instancePath = instancesPath + instanceID;
+        instancePath = Path.Combine(instancesPath, instanceID);
         savePath = Path.Combine(instancePath, "DownloadedFiles.rar");
         extractPath = Path.Combine(instancePath, "ExtractedFiles");
         minecraftPath = Path.Combine(instancePath, ".minecraft");
@@ -135,6 +135,8 @@ public class Program
                         totalBytes = e.TotalBytesToReceive;
                 };
 
+                if (!File.Exists(config.savePath))
+                    File.Create(config.savePath);
                 client.DownloadFileAsync(new Uri(config.url), config.savePath);
                 while (client.IsBusy) { };
 
